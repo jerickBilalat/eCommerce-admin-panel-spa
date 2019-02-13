@@ -4,6 +4,7 @@ import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
+import {withRouter} from "react-router-dom";
 
 import ProductTable from "../common/productTable";
 
@@ -25,7 +26,7 @@ const styles = theme => ({
 class ProductPage extends React.Component {
 
   doGoToManageProductPage = () => {
-    console.log("routing to manage products...")
+    console.log(this.props.history.push("/manage_product"))
   }
   render() {
     return (
@@ -48,4 +49,4 @@ ProductPage.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles, {withTheme: true})(ProductPage);
+export default withRouter(withStyles(styles, {withTheme: true})(ProductPage));

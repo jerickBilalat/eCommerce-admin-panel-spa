@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 
-import ProductsTable from "../common/table.js";
+import ProductsTable from "../common/productTable.js";
 import OrdersTable from "../common/ordersTable.js";
 import PastOrdersTable from "../common/pastOrdersTable.js";
 

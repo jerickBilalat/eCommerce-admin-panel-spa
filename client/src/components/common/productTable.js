@@ -34,7 +34,7 @@ const rows = [
 ];
 
 function SimpleTable(props) {
-  const { classes } = props;
+  const { classes, doGoToManageProductPage } = props;
 
   return (
     <Paper className={classes.root}>
@@ -50,7 +50,7 @@ function SimpleTable(props) {
         </TableHead>
         <TableBody>
           {rows.map(row => (
-            <TableRow key={row.id}>
+            <TableRow hover onClick={() => doGoToManageProductPage()} key={row.id}>
               <TableCell component="th" scope="row">
                 {row.name}
               </TableCell>

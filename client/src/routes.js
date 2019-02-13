@@ -5,7 +5,8 @@ import Layout from "./components/layout";
 
 import SignInPage from "./components/signInPage";
 import Dashboard from "./components/dashboard";
-import ProductPage from "./components/productPage";
+import ProductPage from "./components/product";
+import ManageProductPage from "./components/product/manageProductPage";
 import OrderPage from "./components/orderPage";
 
 const Routes = () => {
@@ -14,6 +15,7 @@ const Routes = () => {
       <Switch>
         <Route path="/" exact component={Dashboard}/>
         <Route path="/products" exact component={ProductPage}/>
+        <Route path="/manage_product" exact component={ManageProductPage} />
         <Route path="/orders" exact component={OrderPage}/>
         <Route path="/signin" exact component={SignInPage}/>
       </Switch>

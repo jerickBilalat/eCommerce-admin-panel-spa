@@ -20,17 +20,14 @@ const styles = theme => ({
 });
 
 let id = 0;
-function createData(name, inStock, sold, price, published) {
+function createData(name, createdOn, completedOn, numberOfItems, total) {
   id += 1;
-  return { id, name, inStock, sold, price, published };
+  return { id, name, createdOn, completedOn, numberOfItems, total };
 }
 
 const rows = [
-  createData('American Classic 8-foot Billiard table', 159, 6, "$45.00", "true"),
-  createData('Cannon 8-foot Billiard table', 237, 9.0, "$1.00", "true"),
-  createData('Brunswick 7-foot Billiard table', 262, 16, "$1.00", "false"),
-  createData('Olhausen 9-foot Billiard table', 305, 3, "$1.00", "true"),
-  createData('Winbrik 7-foot Billiard table', 5, 16.0, "$1.00", "false"),
+  createData('Cory Price', "5/2/18", "5/10/18", 3, "$465.00"),
+  createData('Ben Gory', "6/15/18", "7/19/18", 5, "$900.00"),
 ];
 
 function SimpleTable(props) {
@@ -41,11 +38,11 @@ function SimpleTable(props) {
       <Table className={classes.table}>
         <TableHead>
           <TableRow>
-            <TableCell>Name</TableCell>
-              <TableCell align="right">In Stock</TableCell>
-              <TableCell align="right">Sold</TableCell>
-              <TableCell align="right">Price</TableCell>
-              <TableCell align="right">Published</TableCell>
+            <TableCell>Customer Name</TableCell>
+              <TableCell align="right">Created On</TableCell>
+              <TableCell align="right">Completed On</TableCell>
+              <TableCell align="right">Number of Items</TableCell>
+              <TableCell align="right">Total</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -54,10 +51,10 @@ function SimpleTable(props) {
               <TableCell component="th" scope="row">
                 {row.name}
               </TableCell>
-              <TableCell align="right">{row.inStock}</TableCell>
-              <TableCell align="right">{row.sold}</TableCell>
-              <TableCell align="right">{row.price}</TableCell>
-              <TableCell align="right">{row.published}</TableCell>
+              <TableCell align="right">{row.createdOn}</TableCell>
+              <TableCell align="right">{row.completedOn}</TableCell>
+              <TableCell align="right">{row.numberOfItems}</TableCell>
+              <TableCell align="right">{row.total}</TableCell>
             </TableRow>
           ))}
         </TableBody>

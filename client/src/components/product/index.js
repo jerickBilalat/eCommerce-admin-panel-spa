@@ -5,6 +5,7 @@ import Typography from '@material-ui/core/Typography';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 import {withRouter} from "react-router-dom";
+import {Link} from "react-router-dom";
 
 import ProductTable from "../common/productTable";
 
@@ -37,7 +38,7 @@ class ProductPage extends React.Component {
         <div className={this.props.classes.tableContainer}>
           <ProductTable doGoToManageProductPage={this.doGoToManageProductPage}/>
         </div>
-        <Fab color="primary" aria-label="Add" className={this.props.classes.fab}>
+        <Fab color="primary" aria-label="Add" component={Link} to={"/manage_product"} className={this.props.classes.fab}>
           <AddIcon />
         </Fab>
       </Fragment>

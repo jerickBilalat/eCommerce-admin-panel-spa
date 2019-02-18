@@ -39,7 +39,6 @@ app.post("/api/product", (req, res) => {
 
 // read one by ID
 app.get("/api/product/:id", (req, res) => {
-  console.log('reading one by ID');
  Product.findById(req.params.id, function (err, product) {
   if(err) return new Error(err);
   res.send(product);
@@ -74,27 +73,49 @@ app.delete("/api/delete_product/:id", (req, res) => {
 //////////////////////////////////
 // Order Routes
 //////////////////////////////////
-app.post('/api/order', async (req, res) => {
-  let order = new Order({
-    name: "Thomas  Edison",
-    email: "tomed@gmail.com",
-    phone: "9534846504",
-    message: "call in the morning",
-    products: ["5c6755de920f2b084094f755", "5c6962c7dea72f39a079fb04"],
-    isCompleted: false
+
+
+// read all orders by name desc
+app.get("/api/orders", (req,res) => {
+  Order.find()
+    .sort("name")
+    .exec(function(err, order) {
+      if(err) return new Error(err);
+      res.send(order);
+    })
+})
+
+// read one order by id
+app.get('/api/order/:id',  (req, res) => {
+  Order.findById(req.params.id, function (err, order) {
+    if(err) return new Error(err);
+    res.send(order);
+   });
+})
+
+// create order
+app.post('/api/create_order', (req, res) => {
+  Order.create(req.body, function(err, order) {
+    if(err) return new Error(err);
+    res.send(order);
+  })
+})
+
+// update order
+app.put("/api/edit_order/:id", (req, res) => {
+  Order.findByIdAndUpdate(req.params.id, req.body, {new: true}, function(err, order) {
+    if(err) return new Error(err);
+    res.send(order);
   });
+});
 
-  order = await order.save();
-  res.send(order);
-  
-
-})
-
-app.get('/api/order', async (req, res) => {
-  let orders = await Order.findOne({name: "John Doe"}).populate("products");
-  console.log(orders.productCount);
-  res.send(orders);
-})
+// delete order
+app.delete("/api/delete_order/:id", (req, res) => {
+  Order.findByIdAndRemove(req.params.id, function(err, order) {
+    if(err) return new Error(err);
+    res.send(order);
+  })
+});
 
 
 app.get("/", (req, res) => {

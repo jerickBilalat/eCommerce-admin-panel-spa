@@ -4,8 +4,7 @@ const mongoose = require('mongoose');
 const {Product} = require('./models/product');
 const { Order } = require('./models/order');
 
-mongoose.connect('mongodb://localhost:27017/minRec_admin');
-
+mongoose.connect('mongodb://localhost:27017/minRec_admin', {useNewUrlParser: true});
 
 app.get("/api/product", async(req, res) => {
   let product = await Product.findOne({name: "American Classic Billiard Table" });
@@ -14,11 +13,11 @@ app.get("/api/product", async(req, res) => {
 
 app.post('/api/product', async (req, res) => {
   let product = new Product({
-    name: "American Classic Billiard Table",
+    name: "Brunswick 7-foot Billiard Table",
     used: false,
-    description: "Classic Billiard table for your classic bar",
-    price: "899.00",
-    inStock: 2,
+    description: "Brunswick 7-foot Billiard table for your family fun time.",
+    price: "699.00",
+    inStock: 4,
     sold: 0,
     publish: true,
     images: []
@@ -30,11 +29,11 @@ app.post('/api/product', async (req, res) => {
 
 app.post('/api/order', async (req, res) => {
   let order = new Order({
-    name: "John Doe",
-    email: "john@gmail.com",
-    phone: "9533846789",
-    message: "Hello World",
-    products: ["5c6755de920f2b084094f755"],
+    name: "Thomas  Edison",
+    email: "tomed@gmail.com",
+    phone: "9534846504",
+    message: "call in the morning",
+    products: ["5c6755de920f2b084094f755", "5c6962c7dea72f39a079fb04"],
     isCompleted: false
   });
 

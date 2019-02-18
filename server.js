@@ -3,30 +3,77 @@ const app = express();
 const mongoose = require('mongoose');
 const {Product} = require('./models/product');
 const { Order } = require('./models/order');
+const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
+const cors = require('cors');
 
 mongoose.connect('mongodb://localhost:27017/minRec_admin', {useNewUrlParser: true});
 
-app.get("/api/product", async(req, res) => {
-  let product = await Product.findOne({name: "American Classic Billiard Table" });
-  res.send(product);
+app.use(cors());
+app.use(bodyParser.urlencoded({extended:true}))
+app.use(bodyParser.json());
+app.use(cookieParser());
+
+///////////////////////////////////
+// Product Routes
+//////////////////////////////////
+
+// read all Products sorted by Name
+app.get("/api/products", (req,res) => {
+  Product.find()
+    .sort("name")
+    .exec(function(err, products) {
+      if(err) return new Error(err);
+      res.send(products);
+    })
 })
 
-app.post('/api/product', async (req, res) => {
-  let product = new Product({
-    name: "Brunswick 7-foot Billiard Table",
-    used: false,
-    description: "Brunswick 7-foot Billiard table for your family fun time.",
-    price: "699.00",
-    inStock: 4,
-    sold: 0,
-    publish: true,
-    images: []
-  })
+// read one by name
+app.post("/api/product", (req, res) => {
+  const productName = req.body.name;
+  Product.findOne({name: productName }, function(err, product) {
+   if(err) return new Error(err);
+   res.send(product);
+ })
+})
 
-  product = await product.save();
+// read one by ID
+app.get("/api/product/:id", (req, res) => {
+  console.log('reading one by ID');
+ Product.findById(req.params.id, function (err, product) {
+  if(err) return new Error(err);
   res.send(product);
+ });
+})
+
+// create a product
+app.post('/api/create_product', (req, res) => {
+  Product.create(req.body, function(err, product) {
+    if(err) return new Error(err);
+    res.send(product);
+  })
 });
 
+// update a product
+app.put("/api/edit_product/:id", (req, res) => {
+  Product.findByIdAndUpdate(req.params.id, req.body, {new: true}, function(err, product) {
+    if(err) return new Error(err);
+    res.send(product);
+  });
+});
+
+// delete a product
+app.delete("/api/delete_product/:id", (req, res) => {
+  Product.findByIdAndRemove(req.params.id, function(err, product) {
+    if(err) return new Error(err);
+    res.send(product);
+  })
+})
+
+
+//////////////////////////////////
+// Order Routes
+//////////////////////////////////
 app.post('/api/order', async (req, res) => {
   let order = new Order({
     name: "Thomas  Edison",
@@ -49,9 +96,6 @@ app.get('/api/order', async (req, res) => {
   res.send(orders);
 })
 
-app.use((req, res, next) => {
-
-})
 
 app.get("/", (req, res) => {
   res.json({

@@ -1,21 +1,23 @@
+
 import React from 'react';
 import ReactDOM from 'react-dom';
-
+import Routes from "./routes";
+import { Provider } from 'react-redux';
+import { createStore, applyMiddleware } from 'redux';
 import { BrowserRouter } from 'react-router-dom';
-import Routes from './routes';
+import promiseMiddleware from 'redux-promise';
+import thunk from 'redux-thunk';
+import Reducer from './reducers';
+import apiMiddleware from "./middlewares/api";
+import {fetchProducts} from "./actions/productActions";
 
-// import { Provider } from 'react-redux';
-// import { createStore, applyMiddleware } from 'redux';
-// import promiseMiddleware from 'redux-promise';
-// import ReduxThunk from 'redux-thunk';
-
-// import Reducer from './reducers';
-
-// const createStoreWithMiddleware = applyMiddleware(promiseMiddleware,ReduxThunk)(createStore);
-
-
+const createStoreWithMiddleware = applyMiddleware(thunk, apiMiddleware)(createStore);
+const store = createStoreWithMiddleware(Reducer , window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
+store.dispatch(fetchProducts());
 ReactDOM.render(
-	<BrowserRouter>
-			<Routes />
-	</BrowserRouter>
+  <Provider store={store}>
+    <BrowserRouter>
+      <Routes />
+    </BrowserRouter>
+  </Provider>
 , document.getElementById('root'));

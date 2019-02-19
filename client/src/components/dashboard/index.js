@@ -1,11 +1,17 @@
-import React, {Fragment} from 'react';
+import React, {Fragment, Component} from 'react';
+import { connect } from "react-redux";
 import PropTypes from 'prop-types';
+
+
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 
 import ProductsTable from "../common/productTable.js";
 import OrdersTable from "../common/ordersTable.js";
 import PastOrdersTable from "../common/pastOrdersTable.js";
+
+import { fetchProducts } from "../../actions/productActions";
+
 
 
 const styles = {
@@ -19,35 +25,39 @@ const styles = {
   }
 };
 
-function Dashboard(props) {
-  const { classes } = props;
+class Dashboard extends Component{
 
-  return (
-    <Fragment>
-			<Typography variant="h4" gutterBottom component="h2">
-				Products
-			</Typography>
-      <div className={classes.tableContainer}>
-        <ProductsTable />
-      </div>
-			<Typography variant="h4" gutterBottom component="h2">
-				Current Orders
-			</Typography>
-      <div className={classes.tableContainer}>
-				<OrdersTable />
-      </div>
-			<Typography variant="h4" gutterBottom component="h2">
-				Past Orders
-			</Typography>
-      <div className={classes.tableContainer}>
-				<PastOrdersTable />
-			</div>
-    </Fragment>
-  );
+  render() {
+    const {classes, products } = this.props;
+    return (
+      <Fragment>
+        <Typography variant="h4" gutterBottom component="h2">
+          Products
+        </Typography>
+        <div className={classes.tableContainer}>
+          <ProductsTable products={products}/>
+        </div>
+        <Typography variant="h4" gutterBottom component="h2">
+          Current Orders
+        </Typography>
+        <div className={classes.tableContainer}>
+          <OrdersTable />
+        </div>
+        <Typography variant="h4" gutterBottom component="h2">
+          Past Orders
+        </Typography>
+        <div className={classes.tableContainer}>
+          <PastOrdersTable />
+        </div>
+      </Fragment>
+    )
+  }
 }
 
-Dashboard.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
+function mapStateToProps(state) {
+  return {
+    products: state.products.products
+  }
+}
 
-export default withStyles(styles)(Dashboard);
+export default connect(mapStateToProps)(withStyles(styles)(Dashboard));

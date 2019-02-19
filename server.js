@@ -54,7 +54,7 @@ app.post('/api/create_product', (req, res) => {
 });
 
 // update a product
-app.put("/api/edit_product/:id", (req, res) => {
+app.put("/api/update_product/:id", (req, res) => {
   Product.findByIdAndUpdate(req.params.id, req.body, {new: true}, function(err, product) {
     if(err) return new Error(err);
     res.send(product);

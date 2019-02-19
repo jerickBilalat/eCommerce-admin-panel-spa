@@ -19,23 +19,20 @@ const styles = theme => ({
   },
 });
 
-let id = 0;
-function createData(name, inStock, sold, price, published) {
-  id += 1;
+function createData(id,name, inStock, sold, price, published) {
   return { id, name, inStock, sold, price, published };
 }
 
-const rows = [
-  createData('American Classic 8-foot Billiard table', 159, 6, "$45.00", "true"),
-  createData('Cannon 8-foot Billiard table', 237, 9.0, "$1.00", "true"),
-  createData('Brunswick 7-foot Billiard table', 262, 16, "$1.00", "false"),
-  createData('Olhausen 9-foot Billiard table', 305, 3, "$1.00", "true"),
-  createData('Winbrik 7-foot Billiard table', 5, 16.0, "$1.00", "false"),
-];
 
-function SimpleTable(props) {
-  const { classes, doGoToManageProductPage } = props;
-
+function ProductTable(props) {
+  const { classes,
+    doGoToManageProductPage,
+    products } = props;
+  const rows = products.map(product => {
+    let {_id: id, name, inStock, sold, price, publish} = product;
+    publish = publish ? "yes" : "no";
+    return createData(id, name, inStock, sold, price, publish);
+  })
   return (
     <Paper className={classes.root}>
       <Table className={classes.table}>
@@ -50,7 +47,7 @@ function SimpleTable(props) {
         </TableHead>
         <TableBody>
           {rows.map(row => (
-            <TableRow hover onClick={() => doGoToManageProductPage()} key={row.id}>
+            <TableRow hover onClick={(e) => doGoToManageProductPage(row.id, e)} key={row.id}>
               <TableCell component="th" scope="row">
                 {row.name}
               </TableCell>
@@ -66,8 +63,8 @@ function SimpleTable(props) {
   );
 }
 
-SimpleTable.propTypes = {
+ProductTable.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(SimpleTable);
+export default withStyles(styles)(ProductTable);

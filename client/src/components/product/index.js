@@ -6,7 +6,7 @@ import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 import {withRouter} from "react-router-dom";
 import {Link} from "react-router-dom";
-
+import {connect} from "react-redux";
 import ProductTable from "../common/productTable";
 
 const styles = theme => ({
@@ -26,19 +26,21 @@ const styles = theme => ({
 });
 class ProductPage extends React.Component {
 
-  doGoToManageProductPage = () => {
-    console.log(this.props.history.push("/manage_product"))
+  doGoToManageProductPage = (id) => {
+    this.props.history.push(`/manage_product/${id}`);
   }
+
   render() {
+    const { classes, products} = this.props;
     return (
       <Fragment>
         <Typography variant="h4" gutterBottom component="h2">
           Add/Edit Products
         </Typography>
-        <div className={this.props.classes.tableContainer}>
-          <ProductTable doGoToManageProductPage={this.doGoToManageProductPage}/>
+        <div className={classes.tableContainer}>
+          <ProductTable doGoToManageProductPage={this.doGoToManageProductPage} products={products}/>
         </div>
-        <Fab color="primary" aria-label="Add" component={Link} to={"/manage_product"} className={this.props.classes.fab}>
+        <Fab color="primary" aria-label="Add" component={Link} to={"/manage_product"} className={classes.fab}>
           <AddIcon />
         </Fab>
       </Fragment>
@@ -50,4 +52,10 @@ ProductPage.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withRouter(withStyles(styles, {withTheme: true})(ProductPage));
+function mapStateToProps(state, ownProps) {
+  return {
+    products: state.products.products
+  }
+}
+
+export default connect(mapStateToProps)(withRouter(withStyles(styles, {withTheme: true})(ProductPage)));

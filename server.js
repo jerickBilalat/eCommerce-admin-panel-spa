@@ -6,6 +6,8 @@ const { Order } = require('./models/order');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
+const morgan = require('morgan');
+
 
 mongoose.connect('mongodb://localhost:27017/minRec_admin', {useNewUrlParser: true});
 
@@ -13,6 +15,7 @@ app.use(cors());
 app.use(bodyParser.urlencoded({extended:true}))
 app.use(bodyParser.json());
 app.use(cookieParser());
+app.use(morgan('tiny'));
 
 ///////////////////////////////////
 // Product Routes

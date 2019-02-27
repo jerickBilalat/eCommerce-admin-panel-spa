@@ -136,7 +136,6 @@ class ManageProductPage extends React.Component {
   doDeleteProduct = (id) => {
     this.props.dispatch(deleteProduct(id))
       .then( () => {
-        console.log(id);
         this.props.history.push('/products');
       })
   }

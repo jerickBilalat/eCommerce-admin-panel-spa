@@ -1,7 +1,8 @@
 
 
 import {CALL_API} from "../middlewares/api";
-import { makeCall } from "../api";
+// import { makeCall } from "../api";
+import { makeCall } from "../api/productsMockApi";
 import { 
   FETCH_PRODUCTS_STARTED, 
   FETCH_PRODUCTS_SUCCEEDED, 

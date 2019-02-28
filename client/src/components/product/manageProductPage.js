@@ -266,7 +266,7 @@ class ManageProductPage extends React.Component {
               </Grid>
     
               <Grid item xs={12}>
-                <Button variant="contained" color="default" className={classes.button}>
+                <Button disabled variant="contained" color="default" className={classes.button}>
                   Upload Image
                   <CloudUploadIcon className={classes.rightIcon} />
                 </Button>

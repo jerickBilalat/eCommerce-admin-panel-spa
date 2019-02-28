@@ -35,7 +35,7 @@ class ProductPage extends React.Component {
     return (
       <Fragment>
         <Typography variant="h4" gutterBottom component="h2">
-          Add/Edit Products
+          Products
         </Typography>
         <div className={classes.tableContainer}>
           <ProductTable doGoToManageProductPage={this.doGoToManageProductPage} products={products}/>

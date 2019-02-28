@@ -5,6 +5,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import ShoppingBasketIcon from '@material-ui/icons/ShoppingBasket';
+import AddCircle from '@material-ui/icons/AddCircle';
 
 import Eject from "@material-ui/icons/Eject";
 import LayersIcon from '@material-ui/icons/Layers';
@@ -16,7 +17,7 @@ export const mainListItems = (
     <ListItem 
       button
       component={Link}
-      to={"/"}
+      to={"/products"}
     >
       <ListItemIcon>
         <DashboardIcon />
@@ -26,22 +27,12 @@ export const mainListItems = (
     <ListItem 
       button
       component={Link}
-      to={"/products"}
+      to={"/manage_product"}
     >
       <ListItemIcon>
-        <LayersIcon />
+        <AddCircle />
       </ListItemIcon>
-      <ListItemText primary=" Add/Edit Products" />
-    </ListItem>
-    <ListItem 
-      button
-      component={Link}
-      to={"/orders"}
-    >
-      <ListItemIcon>
-        <ShoppingBasketIcon />
-      </ListItemIcon>
-      <ListItemText primary="Orders" />
+      <ListItemText primary="Create Product" />
     </ListItem>
   </div>
 );

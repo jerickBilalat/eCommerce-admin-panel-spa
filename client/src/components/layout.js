@@ -1,4 +1,5 @@
 import React from 'react';
+import {Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
@@ -7,10 +8,16 @@ import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import Badge from '@material-ui/core/Badge';
+import Eject from "@material-ui/icons/Eject";
+import ExitToApp from "@material-ui/icons/ExitToApp";
+import HowToReg from "@material-ui/icons/HowToReg";
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import NotificationsIcon from '@material-ui/icons/Notifications';
@@ -96,6 +103,7 @@ const styles = theme => ({
 class Dashboard extends React.Component {
   state = {
     open: true,
+    isAuthorized: true
   };
 
   handleDrawerOpen = () => {
@@ -154,7 +162,21 @@ class Dashboard extends React.Component {
           <Divider />
           <List>{mainListItems}</List>
           <Divider />
-          <List>{secondaryListItems}</List>
+          <List>
+            <div>
+              <ListItem
+                button
+                component={Link}
+                to={"/signin"}
+                onClick={() => this.setState( prevState => ({ isAuthorized: !prevState.isAuthorized }))}
+              >
+                <ListItemIcon>
+                { this.state.isAuthorized ? (<ExitToApp />) : (<HowToReg />)}
+                </ListItemIcon>
+                { this.state.isAuthorized ? (<ListItemText primary="Sign Out" />) : (<ListItemText primary="Sign In" />)}
+              </ListItem>
+            </div>
+          </List>
         </Drawer>
         <main className={classes.content}>
           <div className={classes.appBarSpacer} />

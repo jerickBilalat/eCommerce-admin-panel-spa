@@ -8,6 +8,7 @@ import ShoppingBasketIcon from '@material-ui/icons/ShoppingBasket';
 import AddCircle from '@material-ui/icons/AddCircle';
 
 import Eject from "@material-ui/icons/Eject";
+import ExitToApp from "@material-ui/icons/ExitToApp";
 import LayersIcon from '@material-ui/icons/Layers';
 
 import {Link} from "react-router-dom";
@@ -45,7 +46,7 @@ export const secondaryListItems = (
       to={"/signin"}
     >
       <ListItemIcon>
-        <Eject />
+        <ExitToApp />
       </ListItemIcon>
       <ListItemText primary="Sign Out" />
     </ListItem>

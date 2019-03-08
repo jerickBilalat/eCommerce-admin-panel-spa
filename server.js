@@ -37,6 +37,11 @@ app.use(function(req, res, next) {
   next(err);
 });
 
+// log errors 
+app.use(function(err, req, res, next) {
+  console.error(err);
+  next(err);
+})
 // error handlers
 app.use(function(err, req, res, next) {
 
@@ -46,6 +51,7 @@ app.use(function(err, req, res, next) {
         message: err.message,
         error: err
       });
+    return;
   }
 
   res.status(err.status || 500)

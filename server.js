@@ -127,5 +127,31 @@ app.get("/", (req, res) => {
   })
 });
 
+// catch 404 and forward to error handler
+app.use(function(req, res, next) {
+  var err = new Error('Not Found');
+  err.status = 404;
+  next(err);
+});
+
+// error handlers
+app.use(function(err, req, res, next) {
+
+  if (app.get('env') === 'development') {
+    res.status(err.status || 500)
+      .send({
+        message: err.message,
+        error: err
+      });
+  }
+
+  res.status(err.status || 500)
+    .send({
+      message: err.message,
+      error: {}
+    });
+
+});
+
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => { console.log(`Server running at port ${PORT}`)});

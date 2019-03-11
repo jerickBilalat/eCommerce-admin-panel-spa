@@ -1,4 +1,5 @@
 const express = require("express");
+const config = require("config");
 const app = express();
 const mongoose = require('mongoose');
 // const {Product} = require('./models/product');
@@ -12,7 +13,7 @@ const morgan = require('morgan');
 const ProductRoutes = require('./routes/products');
 const OrderRoutes = require('./routes/orders');
 
-mongoose.connect('mongodb://localhost:27017/minRec_admin', {useNewUrlParser: true});
+mongoose.connect(config.get('db'), {useNewUrlParser: true});
 
 app.use(cors());
 app.use(bodyParser.urlencoded({extended:true}))
@@ -63,4 +64,6 @@ app.use(function(err, req, res, next) {
 });
 
 const PORT = process.env.PORT || 8080;
-app.listen(PORT, () => { console.log(`Server running at port ${PORT}`)});
+const server = app.listen(PORT, () => { console.log(`Server running at port ${PORT} with the database of ${config.get('db')}`)});
+
+module.exports = server;

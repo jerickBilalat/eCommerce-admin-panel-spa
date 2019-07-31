@@ -1,3 +1,6 @@
 {
-  "db": "mongodb://localhost:27017/admin_app"
+  "db": "mongodb://localhost:27017/admin_app",
+  "cloudinary_cloud_name": "minnesotarec",
+  "cloudinary_api_key": "959727537862416",
+  "cloudinary_api_secret": "5MX-gdb4u1CGOWcsq6AbpQ9PszE"
 }

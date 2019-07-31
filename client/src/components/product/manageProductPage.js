@@ -1,5 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { CloudinaryContext, Transformation, Image } from 'cloudinary-react';
+import cloudinary  from 'cloudinary-core';
+import Card from '@material-ui/core/Card';
+import CardMedia from '@material-ui/core/CardMedia';
+import axios from 'axios';
+import {API_BASE_URL} from '../../constants';
+
+import CircularProgress from '@material-ui/core/CircularProgress';
 import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import AttachMoney from '@material-ui/icons/AttachMoney';
@@ -19,6 +27,12 @@ import Grid from '@material-ui/core/Grid';
 
 
 const styles = theme => ({
+  card: {
+    minWidth: 100
+  },
+  media: {
+    height: 100
+  },
   container: {
     display: 'flex',
     flexWrap: 'wrap',
@@ -47,12 +61,19 @@ const styles = theme => ({
 
 class ManageProductPage extends React.Component {
 
-  state = {
+  constructor(props) {
+    super(props)
+    this.state = {
       product: this.props.product,
       errors: {},
-      saving: this.props.isSaving
-  };
-
+      saving: this.props.isSaving,
+      uploadedProductImagesLinks: [],
+      isUploading: false,
+      isWidgetCreated: false,
+      isFormValid: false
+    };
+  }
+  
   updateFormField = name => event => {
     let product = {...this.state.product}
     product[name] = event.target.value;
@@ -96,7 +117,7 @@ class ManageProductPage extends React.Component {
 
     });
     
-    this.setState({ errors });
+    this.setState({ errors, isFormValid: formIsValid });
     return formIsValid;
 
   }
@@ -139,6 +160,45 @@ class ManageProductPage extends React.Component {
         this.props.history.push('/products');
       })
   }
+
+  updateImageLinks = (links) => {
+    this.setState({ uploadedProductImagesLinks: [...this.state.uploadedProductImagesLinks, ...links], isUploading: false})
+  }
+  openUploadImageWidget=() => {
+    if(!this.isFormValid()) return;
+    this.setState({isUploading: true}, () => {
+      const that = this;
+      let links = []
+      window.cloudinary.openUploadWidget({ 
+        cloud_name: 'minnesotarec', 
+        upload_preset: 'mnhermanrex',
+        multiple: true,
+        },
+          function(error, result) {
+            // todo handle error  
+            if(result.event === "success") {
+              console.log(result);
+              links = [...links, result.info.url]
+            }
+            if(result.event === "close") {
+              return that.updateImageLinks(links)
+            }
+          });
+    })
+    
+  }
+
+  removePhoto= (url) => {
+    // todo unstable because it relies on and number of chracters
+    const startIdx = url.indexOf('mnhermanrex_unsigned/');
+    const endIdx = url.indexOf('.jpg') || url.indexOf('.jpeg'); // todo convert all uploaded images to jpg
+    const image_public_id = url.substring(startIdx, endIdx);
+    axios.get(`${API_BASE_URL}/api/removeImage?public_id=${image_public_id}`)
+    .then( res => {
+      this.setState({uploadedProductImagesLinks: [...this.state.uploadedProductImagesLinks.filter( x => x !== url)]})
+    })
+  }
+
   renderForm() {
     const { classes } = this.props;
     const { product, errors, saving } = this.state;
@@ -266,10 +326,42 @@ class ManageProductPage extends React.Component {
               </Grid>
     
               <Grid item xs={12}>
-                <Button disabled variant="contained" color="default" className={classes.button}>
+                <Button variant="contained" color="default" className={classes.button} onClick={this.openUploadImageWidget}>
                   Upload Image
-                  <CloudUploadIcon className={classes.rightIcon} />
+                  {this.state.isUploading 
+                    ? <CircularProgress
+                        style={{margin: "5px"}}
+                        size={14}
+                        thickness={5}
+                      />
+                    : <CloudUploadIcon className={classes.rightIcon} />
+                  }
                 </Button>
+              </Grid>
+
+              <Grid item xs={12}>
+                  {this.state.uploadedProductImagesLinks.length > 0 ? 
+                    <span style={{color: "red"}}>
+                      {" "}Tap on picture to remove
+                    </span>
+                  : <span>Fill out all info before uploading</span>  
+                  }
+                  <Grid container direction="row" justify="center" spacing={8}>
+                    <Grid item>
+                    </Grid>
+                    {this.state.uploadedProductImagesLinks.length > 0 &&
+                      this.state.uploadedProductImagesLinks.map( url => (
+                        <Grid item key={url}>
+                          <Card className={classes.card} onClick={() => this.removePhoto(url)}>
+                            <CardMedia
+                              className={classes.media}
+                              image={url}
+                            />
+                          </Card>
+                        </Grid>
+                      ))
+                    }
+                  </Grid>
               </Grid>
               
             </Grid>

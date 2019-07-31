@@ -1,5 +1,5 @@
-// import { makeCall } from "../api";
-import { makeCall } from "../api/productsMockApi";
+import { makeCall } from "../api";
+// import { makeCall } from "../api/productsMockApi";
 export const CALL_API = "CALL_API";
 
 const apiMiddleware = store => next => action => {

@@ -1,5 +1,8 @@
 import React, {Fragment} from 'react';
 import PropTypes from 'prop-types';
+
+import { fetchProducts } from '../../actions/productActions'
+
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Fab from '@material-ui/core/Fab';
@@ -26,6 +29,9 @@ const styles = theme => ({
 });
 class ProductPage extends React.Component {
 
+  componentDidMount() {
+    this.props.dispatch(fetchProducts())
+  }
   doGoToManageProductPage = (id) => {
     this.props.history.push(`/manage_product/${id}`);
   }

@@ -1,10 +1,11 @@
 const {Product}= require('../models/product');
 const mongoose = require('mongoose');
 const express = require('express');
+const requireLogin = require('../middleware/requireLogin')
 const router = express.Router();
 
 // read all products sorted by name
-router.get('/',  function(req, res, next) {
+router.get('/', requireLogin, function(req, res, next) {
   Product.find()
     .sort("name")
     .exec(function(err, products) {
@@ -14,7 +15,7 @@ router.get('/',  function(req, res, next) {
 })
 
 // read one by name
-router.post("/", (req, res, next) => {
+router.post("/", requireLogin, (req, res, next) => {
   const productName = req.body.name;
   Product.findOne({name: productName }, function(err, product) {
    if(err) return next(err);
@@ -23,7 +24,7 @@ router.post("/", (req, res, next) => {
 })
 
 // read one by ID
-router.get("/:id", (req, res, next) => {
+router.get("/:id", requireLogin, (req, res, next) => {
   Product.findById(req.params.id, function (err, product) {
    if(err) return next(err);
    res.send(product);
@@ -31,7 +32,7 @@ router.get("/:id", (req, res, next) => {
  })
 
  // create a product
-router.post('/create_product', (req, res, next) => {
+router.post('/create_product', requireLogin, (req, res, next) => {
   Product.create(req.body, function(err, product) {
     if(err) return next(err);
     res.send(product);
@@ -39,7 +40,7 @@ router.post('/create_product', (req, res, next) => {
 });
 
 // update a product
-router.put("/update_product/:id", (req, res, next) => {
+router.put("/update_product/:id", requireLogin, (req, res, next) => {
   Product.findByIdAndUpdate(req.params.id, req.body, {new: true}, function(err, product) {
     if(err) return next(err);
     res.send(product);
@@ -47,7 +48,7 @@ router.put("/update_product/:id", (req, res, next) => {
 });
 
 // delete a product
-router.delete("/delete_product/:id", (req, res, next) => {
+router.delete("/delete_product/:id", requireLogin, (req, res, next) => {
   Product.findByIdAndRemove(req.params.id, function(err, product) {
     if(err) return next(err);
     res.send(product);

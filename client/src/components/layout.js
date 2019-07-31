@@ -1,4 +1,5 @@
 import React from 'react';
+import {connect} from 'react-redux';
 import {Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
@@ -23,6 +24,7 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import { mainListItems, secondaryListItems } from './utils/navLinks';
 
+import {logout} from '../actions/authActions'
 
 const drawerWidth = 240;
 
@@ -102,8 +104,8 @@ const styles = theme => ({
 
 class Dashboard extends React.Component {
   state = {
-    open: true,
-    isAuthorized: true
+    open: false,
+    isAuthorized: this.props.user
   };
 
   handleDrawerOpen = () => {
@@ -113,6 +115,11 @@ class Dashboard extends React.Component {
   handleDrawerClose = () => {
     this.setState({ open: false });
   };
+
+  handleAuthClick = async () => {
+    await this.props.dispatch(logout());
+    return this.setState( prevState => ({ isAuthorized: null }))
+  }
 
   render() {
     const { classes } = this.props;
@@ -163,19 +170,21 @@ class Dashboard extends React.Component {
           <List>{mainListItems}</List>
           <Divider />
           <List>
-            <div>
-              <ListItem
-                button
-                component={Link}
-                to={"/signin"}
-                onClick={() => this.setState( prevState => ({ isAuthorized: !prevState.isAuthorized }))}
-              >
-                <ListItemIcon>
-                { this.state.isAuthorized ? (<ExitToApp />) : (<HowToReg />)}
-                </ListItemIcon>
-                { this.state.isAuthorized ? (<ListItemText primary="Sign Out" />) : (<ListItemText primary="Sign In" />)}
-              </ListItem>
-            </div>
+            { this.props.user !== null && this.props.user.sub &&
+              <div>
+                <ListItem
+                  button
+                  component={Link}
+                  to={"/signin"}
+                  onClick={this.handleAuthClick}
+                >
+                  <ListItemIcon>
+                    <ExitToApp />
+                  </ListItemIcon>
+                  <ListItemText primary="Sign Out" />
+                </ListItem>
+              </div>
+            }
           </List>
         </Drawer>
         <main className={classes.content}>
@@ -191,4 +200,10 @@ Dashboard.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(Dashboard);
+function mapStateToProps(state) {
+  return {
+    user: state.user
+  }
+}
+
+export default withStyles(styles)(connect(mapStateToProps)(Dashboard));

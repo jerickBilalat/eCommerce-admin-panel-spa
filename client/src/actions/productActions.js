@@ -1,8 +1,8 @@
 
 
 import {CALL_API} from "../middlewares/api";
-// import { makeCall } from "../api";
-import { makeCall } from "../api/productsMockApi";
+import { makeCall } from "../api";
+// import { makeCall } from "../api/productsMockApi";
 import { 
   FETCH_PRODUCTS_STARTED, 
   FETCH_PRODUCTS_SUCCEEDED, 
@@ -42,7 +42,7 @@ export function saveProduct(body, productID) {
   return function(dispatch) {
     dispatch({ type:SAVE_PRODUCT_STARTED })
     if(productID) {
-      return makeCall({method: "PUT", body: body, endpoint: `/api/update_product/${productID}`})
+      return makeCall({method: "PUT", body: body, endpoint: `/api/products/update_product/${productID}`})
       .then(res => {
         dispatch(updateProductSucceeded(res.data))
       })
@@ -51,7 +51,7 @@ export function saveProduct(body, productID) {
         dispatch({ type: SAVE_PRODUCT_FAILED })
       });
     }
-    return makeCall({method : "POST", body: body, endpoint: "/api/create_product"})
+    return makeCall({method : "POST", body: body, endpoint: "/api/products/create_product"})
       .then( res => {
           dispatch(createProductSucceeded(res.data))
       })
@@ -65,7 +65,7 @@ export function saveProduct(body, productID) {
 
 export function deleteProduct(id) {
   return function(dispatch) {
-   return makeCall({method: "DELETE", body: {}, endpoint: `/api/delete_product/${id}`})
+   return makeCall({method: "DELETE", body: {}, endpoint: `/api/products/delete_product/${id}`})
       .then( res => {
         dispatch({ type: DELETE_PRODUCT, payload: id}) 
       })

@@ -1,11 +1,16 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import { withRouter } from "react-router-dom";
+import { connect } from "react-redux";
+
+
+// actions
+import {logout} from '../../actions/authActions'
+import {login} from '../../actions/authActions'
+
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import FormControl from '@material-ui/core/FormControl';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
@@ -45,49 +50,94 @@ const styles = theme => ({
   },
 });
 
-function SignIn(props) {
-  const { classes } = props;
+class LogIn extends React.Component {
 
-  return (
-    <main className={classes.main}>
-      <CssBaseline />
-      <Paper className={classes.paper}>
-        <Avatar className={classes.avatar}>
-          <LockOutlinedIcon />
-        </Avatar>
-        <Typography component="h1" variant="h5">
-          Sign in
-        </Typography>
-        <form className={classes.form}>
-          <FormControl margin="normal" required fullWidth>
-            <InputLabel htmlFor="email">Email Address</InputLabel>
-            <Input id="email" name="email" autoComplete="email" autoFocus />
-          </FormControl>
-          <FormControl margin="normal" required fullWidth>
-            <InputLabel htmlFor="password">Password</InputLabel>
-            <Input name="password" type="password" id="password" autoComplete="current-password" />
-          </FormControl>
-          <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="Remember me"
-          />
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-          >
-            Sign in
-          </Button>
-        </form>
-      </Paper>
-    </main>
-  );
+  state = {
+    errorMessage: '',
+    name: 'mnrec',
+    password: ''
+  }
+
+  componentDidMount() {
+    this.props.dispatch(logout())
+  }
+
+  isFormValid = () => {
+    const {name, password} = this.state
+    if(name.length === 0 || password.length === 0) {
+      this.setState({errorMessage:'Username and Password fields are required'})
+      return false
+    }
+    return true
+  }
+  onSubmit = (e) => {
+    e.preventDefault()
+    if(!this.isFormValid()) return
+    const {name, password} = this.state
+    
+    this.props.dispatch(login({name, password}))
+    .then( () => {
+      this.props.history.push("/dashboard")
+    })
+    .catch( error => {
+     const message = error.response.data.error.message
+      this.setState({errorMessage: message})
+    })
+  }
+
+  onChange = (e) => {
+    const {name, value}= e.target
+    return this.setState({
+      [name] : value
+    })
+  }
+
+  render() {
+    const {classes} = this.props,
+          {errorMessage} = this.state
+    return (
+      <main className={classes.main}>
+        <CssBaseline />
+        <Paper className={classes.paper}>
+          <Avatar className={classes.avatar}>
+            <LockOutlinedIcon />
+          </Avatar>
+          <Typography component="h1" variant="h5">
+            Log in
+          </Typography>
+          <form className={classes.form}>
+          {errorMessage  && 
+            <Typography component="p" color="error">
+                  {errorMessage}
+            </Typography>
+          }
+          <Typography component="p" variant="caption">
+            *required
+          </Typography>
+            <FormControl margin="normal" required fullWidth>
+              <InputLabel htmlFor="name" >Username</InputLabel>
+              <Input name="name" type="text" id="name" value="mnrec" />
+            </FormControl>
+            <FormControl margin="normal" required fullWidth>
+              <InputLabel htmlFor="password" >Password</InputLabel>
+              <Input name="password" type="password" id="password" value={this.state.password} onChange={this.onChange} />
+            </FormControl>
+            <Button
+              type="submit"
+              onClick={this.onSubmit}
+              fullWidth
+              variant="contained"
+              color="primary"
+              className={classes.submit}
+            >
+              Log in
+            </Button>
+          </form>
+        </Paper>
+      </main>
+    )
+  }
 }
 
-SignIn.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
 
-export default withStyles(styles)(SignIn);
+export default withRouter(connect()(withStyles(styles)(LogIn)))

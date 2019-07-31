@@ -9,11 +9,9 @@ import promiseMiddleware from 'redux-promise';
 import thunk from 'redux-thunk';
 import Reducer from './reducers';
 import apiMiddleware from "./middlewares/api";
-import {fetchProducts} from "./actions/productActions";
 
 const createStoreWithMiddleware = applyMiddleware(thunk, apiMiddleware)(createStore);
 const store = createStoreWithMiddleware(Reducer , window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
-store.dispatch(fetchProducts());
 ReactDOM.render(
   <Provider store={store}>
     <BrowserRouter>

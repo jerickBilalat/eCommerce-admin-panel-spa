@@ -64,10 +64,10 @@ class ManageProductPage extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      product: this.props.product,
+      product: {...this.props.product},
       errors: {},
       saving: this.props.isSaving,
-      uploadedProductImagesLinks: [],
+      uploadedProductImagesLinks: [...this.props.product.images],
       isUploading: false,
       isWidgetCreated: false,
       isFormValid: false
@@ -129,21 +129,21 @@ class ManageProductPage extends React.Component {
 
     const { product: unmodifiedProduct } = this.props;
     const productID = this.props.match.params.id;
-    let body;
-    
+    let updateBody;
     if(productID) {
       const { product: modifiedProduct } =  this.state;
-      body = {};
-    
+      updateBody = {};
+      modifiedProduct.images = [...this.state.uploadedProductImagesLinks]
       for( let key in modifiedProduct) {
+        debugger
         if(unmodifiedProduct[key] !== modifiedProduct[key]) {
-          body[key] = modifiedProduct[key]
+          updateBody[key] = modifiedProduct[key]
         }
       }
-  
+      
     }
-
-    const requestBody = body || this.state.product;
+    
+    const requestBody = updateBody || this.state.product;
 
     this.setState({ saving: true });
     this.props.dispatch(saveProduct(requestBody, productID))
@@ -177,7 +177,6 @@ class ManageProductPage extends React.Component {
           function(error, result) {
             // todo handle error  
             if(result.event === "success") {
-              console.log(result);
               links = [...links, result.info.url]
             }
             if(result.event === "close") {
@@ -422,9 +421,8 @@ function mapStateToProps(state, ownProps){
   } 
 
   if(products && products.length > 0 && productId) {
-    product = selectById(products, productId);
+    product = {...selectById(products, productId)};
   }
-
   return {
     product: product,
     isSaving: state.products.isSaving

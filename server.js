@@ -13,6 +13,7 @@ const cloudinary = require('cloudinary').v2;
 // routes
 const ProductRoutes = require('./routes/products');
 const OrderRoutes = require('./routes/orders');
+const AuthRoutes = require('./routes/authRoutes')
 
 mongoose.connect(config.get('db'), {useNewUrlParser: true});
 
@@ -29,7 +30,7 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(morgan('tiny'));
 
-
+app.use('/api/auth', AuthRoutes)
 app.use('/api/products', ProductRoutes );
 app.use('/api/orders', OrderRoutes );
 

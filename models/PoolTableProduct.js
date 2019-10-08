@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const ProductSchema = new Schema({
+const PoolTableProductSchema = new Schema({
   name:{
     required: true,
     type: String,
@@ -12,6 +12,10 @@ const ProductSchema = new Schema({
     required: true,
     type: Boolean,
     deafult: false
+  },
+  size: {
+    required: true,
+    type: Number
   },
   description:{
       required: true,
@@ -45,6 +49,6 @@ const ProductSchema = new Schema({
   }
 }, {timestamps: true});
 
-const Product = mongoose.model("Product", ProductSchema);
+const PoolTable = mongoose.model("PoolTable", PoolTableProductSchema);
 
-module.exports = { Product }
+module.exports = { PoolTable }

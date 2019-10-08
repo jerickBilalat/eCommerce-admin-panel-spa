@@ -11,7 +11,7 @@ const morgan = require('morgan');
 const cloudinary = require('cloudinary').v2;
 
 // routes
-const ProductRoutes = require('./routes/products');
+const PoolTableRoutes = require('./routes/poolTable');
 const OrderRoutes = require('./routes/orders');
 const AuthRoutes = require('./routes/authRoutes')
 
@@ -31,7 +31,7 @@ app.use(cookieParser());
 app.use(morgan('tiny'));
 
 app.use('/api/auth', AuthRoutes)
-app.use('/api/products', ProductRoutes );
+app.use('/api/pool_table', PoolTableRoutes );
 app.use('/api/orders', OrderRoutes );
 
 app.get("/", (req, res) => {

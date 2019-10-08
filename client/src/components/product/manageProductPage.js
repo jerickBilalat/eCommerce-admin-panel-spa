@@ -135,7 +135,6 @@ class ManageProductPage extends React.Component {
       updateBody = {};
       modifiedProduct.images = [...this.state.uploadedProductImagesLinks]
       for( let key in modifiedProduct) {
-        debugger
         if(unmodifiedProduct[key] !== modifiedProduct[key]) {
           updateBody[key] = modifiedProduct[key]
         }
